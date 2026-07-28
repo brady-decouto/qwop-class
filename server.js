@@ -14,4 +14,13 @@ app.post('/log', (req, res) => {
     res.sendStatus(200)
 })
 
+app.get('/download', (req, res) => {
+    const filePath = path.join(__dirname, 'results.csv')
+    if (fs.existsSync(filePath)) {
+        res.download(filePath)
+    } else {
+        res.status(404).send('No results yet')
+    }
+})
+
 app.listen(port, () => console.log(`PORT: ${port}`))
