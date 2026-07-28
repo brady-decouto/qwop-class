@@ -6,7 +6,7 @@ const fs = require('fs')
 
 const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbzEdzWNCkrciBgPrI93zAcYPbAOmi0TyuYqN9KX5FvW4TRJwfBW3WVKaxM1VAbyqW4RQw/exec'
 
-app.use(express.json())
+app.use(express.json({ limit: '2mb' }))
 app.use('/', express.static(path.join(__dirname, 'public')))
 
 app.post('/log', async (req, res) => {
@@ -23,6 +23,22 @@ app.post('/log', async (req, res) => {
         })
     } catch (err) {
         console.log('Failed to forward to Google Sheet:', err)
+    }
+
+    res.sendStatus(200)
+})
+
+app.post('/log-detail', async (req, res) => {
+    const { name, distance, time, keyEvents, jointSamples } = req.body
+
+    try {
+        await fetch(GOOGLE_SHEET_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'detail', name, distance, time, keyEvents, jointSamples })
+        })
+    } catch (err) {
+        console.log('Failed to forward detailed log to Google Sheet:', err)
     }
 
     res.sendStatus(200)
