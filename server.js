@@ -9,9 +9,20 @@ const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyE2DHIJoTNTVm
 app.use(express.json({ limit: '2mb' }))
 app.use('/', express.static(path.join(__dirname, 'public')))
 
+app.get('/classes', async (req, res) => {
+    try {
+        const response = await fetch(GOOGLE_SHEET_URL)
+        const data = await response.json()
+        res.json(data)
+    } catch (err) {
+        console.log('Failed to fetch classes:', err)
+        res.json({ sheets: [] })
+    }
+})
+
 app.post('/log', async (req, res) => {
-    const { name, score, time } = req.body
-    const line = `${new Date().toISOString()},${name},${score},${time}\n`
+    const { className, name, distance, time, keyEvents, jointSamples } = req.body
+    const line = `${new Date().toISOString()},${className},${name},${distance},${time}\n`
 
     fs.appendFileSync(path.join(__dirname, 'results.csv'), line)
 
@@ -19,26 +30,10 @@ app.post('/log', async (req, res) => {
         await fetch(GOOGLE_SHEET_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, score, time })
+            body: JSON.stringify({ className, name, distance, time, keyEvents, jointSamples })
         })
     } catch (err) {
         console.log('Failed to forward to Google Sheet:', err)
-    }
-
-    res.sendStatus(200)
-})
-
-app.post('/log-detail', async (req, res) => {
-    const { name, distance, time, keyEvents, jointSamples } = req.body
-
-    try {
-        await fetch(GOOGLE_SHEET_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ type: 'detail', name, distance, time, keyEvents, jointSamples })
-        })
-    } catch (err) {
-        console.log('Failed to forward detailed log to Google Sheet:', err)
     }
 
     res.sendStatus(200)
