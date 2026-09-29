@@ -80,7 +80,7 @@ function checkAndLogGameEnd() {
     if (!physicsBody) return;
 
     const distance = physicsBody.getPosition().x / 10;
-    const time = CORE.game.scoreTime / 10;
+    const time = runStartTime !== null ? (Date.now() - runStartTime) / 1000 : 0;
 
     if (CORE.game.gameEnded) {
         if (!hasLoggedThisRun) {
