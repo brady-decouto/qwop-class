@@ -4,7 +4,7 @@ const port = process.env.PORT || 3000
 const path = require('path')
 const fs = require('fs')
 
-const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyE2DHIJoTNTVmKPqttipyOlGhwpaDDNtwEBFqtMOM9XDqaaty2oZhTOEaFu3mCyUducQ/exec'
+const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwgKw-GExJlI76vZCIrzpf395rgJIPPPtbgGP86AyDV-g9csfCrBYIxrSt2aosdjKCglA/exec'
 
 app.use(express.json({ limit: '2mb' }))
 app.use('/', express.static(path.join(__dirname, 'public')))
