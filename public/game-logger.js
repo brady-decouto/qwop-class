@@ -6,7 +6,7 @@ const CORE = QWOP.__i.Luxe.core;
 const SNOW_CORE = QWOP.__i["snow.Snow"].core;
 
 const TIMESTEP_SIZE = 0.03333333333333333;
-const JOINT_SAMPLE_INTERVAL = 400;
+const JOINT_SAMPLE_INTERVAL = 100;
 
 const TRACKED_PARTS = [
     "torso", "leftThigh", "leftCalf", "leftFoot",
